@@ -1,0 +1,8 @@
+package com.routematch.routematchcodingchallenge.data
+
+/**
+ * Created by clj00 on 3/2/2018.
+ */
+interface DataManager {
+
+}
