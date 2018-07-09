@@ -5,11 +5,9 @@ import android.databinding.ObservableArrayList
 import android.databinding.ObservableField
 import android.databinding.ObservableList
 import android.location.Location
-import android.util.Log
 import com.routematch.routematchcodingchallenge.data.DataManager
 import com.routematch.routematchcodingchallenge.data.models.Place
 import com.routematch.routematchcodingchallenge.ui.base.BaseViewModel
-import com.routematch.routematchcodingchallenge.ui.main.MainActivity.Companion.TAG
 import com.routematch.routematchcodingchallenge.util.SchedulerProvider
 
 /** The ViewModel for the MainActivity. Fetches nearby places and posts the results to the observing MainActivity. **/
