@@ -3,10 +3,10 @@ package com.routematch.routematchcodingchallenge.data.network.responses
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-/** This class is for parsing the responses from the Google Places API. **/
+/** This class is for parsing the responses from the Google Places API using GSON. **/
 class PlacesResponse {
 
-    /** For parsing the response from calling get nearby places to the Google Places API. **/
+    /** For parsing the response from calling get nearby places to the Google Places API using GSON. **/
     class GetNearbyPlaces {
 
         @Expose
@@ -297,8 +297,7 @@ class PlacesResponse {
 
     }
 
-    // TODO: Tweak Response classes to better match api.
-    /** For parsing the response from calling get nearby places to the Google Places API. **/
+    /** For parsing the response from calling get nearby places to the Google Places API using GSON. **/
     class GetPlaceDetails {
 
         @Expose

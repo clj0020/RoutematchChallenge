@@ -9,7 +9,7 @@ import dagger.Module
 
 
 /**
- * Created by clj00 on 3/2/2018.
+ * This class tells dagger how to build the Activities.
  */
 @Module
 abstract class ActivityBuilder {

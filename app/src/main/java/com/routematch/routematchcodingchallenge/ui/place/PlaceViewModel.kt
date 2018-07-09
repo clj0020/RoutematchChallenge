@@ -6,6 +6,7 @@ import com.routematch.routematchcodingchallenge.data.DataManager
 import com.routematch.routematchcodingchallenge.data.models.Place
 import com.routematch.routematchcodingchallenge.util.SchedulerProvider
 
+/** The ViewModel for the PlaceActivity. Fetches place details and posts the results to the observing PlaceActivity. **/
 class PlaceViewModel(dataManager: DataManager, schedulerProvider: SchedulerProvider): BaseViewModel<PlaceNavigator>(dataManager, schedulerProvider) {
 
     val placeLiveData: MutableLiveData<Place> = MutableLiveData<Place>()

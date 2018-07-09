@@ -2,6 +2,7 @@ package com.routematch.routematchcodingchallenge.data.models
 
 import android.location.Location
 
+/** The Custom Data Class for a Place. **/
 data class Place(
         val id: String?,
         val place_id: String?,

@@ -7,7 +7,7 @@ import com.routematch.routematchcodingchallenge.data.DataManager
 import com.routematch.routematchcodingchallenge.util.SchedulerProvider
 
 /**
- * Created by clj00 on 3/2/2018.
+ * This is the BaseViewModel class. Sets up Composite Disposable and contains a loading observable that can be reacted to by host activities or fragments.
  */
 abstract class BaseViewModel<N>(val dataManager: DataManager,
                                 val schedulerProvider: SchedulerProvider) : ViewModel() {

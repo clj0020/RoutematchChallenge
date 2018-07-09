@@ -12,17 +12,24 @@ import com.routematch.routematchcodingchallenge.data.models.Place
 import com.routematch.routematchcodingchallenge.databinding.ActivityPlaceBinding
 import com.routematch.routematchcodingchallenge.ui.base.BaseActivity
 import com.routematch.routematchcodingchallenge.ui.main.MainActivity
+import com.routematch.routematchcodingchallenge.util.ImageLoaderCallback
 import javax.inject.Inject
 
+/**
+ * An activity that displays the details of a selected Place.
+ */
 class PlaceActivity : BaseActivity<ActivityPlaceBinding, PlaceViewModel>(),
-        PlaceNavigator {
+        PlaceNavigator,
+        ImageLoaderCallback {
 
+    /** Injects the viewmodel. **/
     @Inject
     override lateinit var viewModel: PlaceViewModel
         internal set
 
     private var mActivityPlaceBinding: ActivityPlaceBinding? = null
 
+    /** Sets the binding variable **/
     override val bindingVariable: Int
         get() = BR.viewModel
 
@@ -33,11 +40,21 @@ class PlaceActivity : BaseActivity<ActivityPlaceBinding, PlaceViewModel>(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mActivityPlaceBinding = viewDataBinding
+
+        // Set callback for image loading before executing pending bindings.
+        mActivityPlaceBinding!!.setImageLoaderCallback(this)
+
+        // Execute other pending bindings.
+        mActivityPlaceBinding!!.executePendingBindings()
+
+        // Set Navigator
         viewModel.navigator = this
 
+        // Sets up the UI and subscribes to the place live data in the viewmodel.
         setup()
     }
 
+    /** Sets up the UI and subscribes to the place live data in the viewmodel. **/
     fun setup() {
         // Check if there are intent extras.
         if (intent.extras != null) {
@@ -64,12 +81,37 @@ class PlaceActivity : BaseActivity<ActivityPlaceBinding, PlaceViewModel>(),
 
     /** Fetchs the Place Details and subscribes to the Viewmodel's Place Live Data. **/
     fun subscribeToPlaceLiveData(place_id: String) {
+        // Fetch the Place from the Google Places API.
         viewModel.fetchPlace(place_id = place_id)
+
+        // Observes the ViewModel's Place Live Data object and bind the result to the layout.
         viewModel.placeLiveData.observe(this, Observer<Place> { place: Place? ->
             if (place != null) {
+                // Binds the place to the layout.
                 mActivityPlaceBinding!!.setPlace(place)
             }
         })
+    }
+
+    /** Called when the image loading process begins. **/
+    override fun onImageLoading() {
+        // Shows the loading progress spinner
+        viewModel.setIsLoading(true)
+    }
+
+    /** Called when the image has successfully loaded from the Places Photo API **/
+    override fun onImageReady() {
+        // Hides the loading progress spinner.
+        viewModel.setIsLoading(false)
+    }
+
+    /** Called when the image loading process encounters an error **/
+    override fun onImageLoadError() {
+        // Hides the loading progress spinner
+        viewModel.setIsLoading(false)
+
+        // Sends an error message.
+        handleError(Throwable(message = "Error loading place image.", cause = Exception()))
     }
 
     /** Handles errors. **/

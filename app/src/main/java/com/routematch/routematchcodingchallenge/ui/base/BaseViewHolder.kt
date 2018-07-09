@@ -5,7 +5,7 @@ import android.view.View
 
 
 /**
- * Created by clj00 on 3/2/2018.
+ * An abstract class for RecyclerView ViewHolders.
  */
 abstract class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

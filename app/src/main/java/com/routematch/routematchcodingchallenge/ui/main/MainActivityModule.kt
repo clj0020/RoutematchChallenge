@@ -8,7 +8,7 @@ import dagger.Module
 
 
 /**
- * Created by clj00 on 3/2/2018.
+ * This is the MainActivityModule that allows the MainActivity to inject the ViewModel, RecyclerView Adapter, and the RecyclerView LinearLayout Manager.
  */
 @Module
 class MainActivityModule {

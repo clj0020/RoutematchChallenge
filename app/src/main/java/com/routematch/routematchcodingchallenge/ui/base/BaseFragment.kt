@@ -15,7 +15,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog
 
 
 /**
- * Created by clj00 on 3/2/2018.
+ * This is the BaseFragment class that removes some of the boilerplate of binding to data, displaying dialogs, and other helpful things.
  */
 abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel<*>>: Fragment() {
 
@@ -52,9 +52,37 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel<*>>: Fragment
     init {
     }
 
+    // Check if network is connected.
     val isNetworkConnected: Boolean
         get() = baseActivity != null && baseActivity!!.isNetworkConnected
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        performDependencyInjection()
+        super.onCreate(savedInstanceState)
+        mViewModel = viewModel
+        setHasOptionsMenu(false)
+    }
+
+    // When the view is created, perform data binding.
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        viewDataBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
+        mRootView = viewDataBinding!!.getRoot()
+        return mRootView
+    }
+
+    // When the View has been created, bind the viewmodel and execute all other pending bindings.
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewDataBinding!!.setVariable(bindingVariable, mViewModel)
+        viewDataBinding!!.executePendingBindings()
+    }
+
+    // Performs dependency injection.
+    private fun performDependencyInjection() {
+        AndroidSupportInjection.inject(this)
+    }
+
+    // Called when fragment is attached to an activity and lets the activity know.
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is BaseActivity<*, *>) {
@@ -64,36 +92,20 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel<*>>: Fragment
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        performDependencyInjection()
-        super.onCreate(savedInstanceState)
-        mViewModel = viewModel
-        setHasOptionsMenu(false)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        viewDataBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
-        mRootView = viewDataBinding!!.getRoot()
-        return mRootView
-    }
-
+    // Called when fragment is detached from an activity.
     override fun onDetach() {
         baseActivity = null
         super.onDetach()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewDataBinding!!.setVariable(bindingVariable, mViewModel)
-        viewDataBinding!!.executePendingBindings()
-    }
-
+    // Hides the keyboard.
     fun hideKeyboard() {
         if (baseActivity != null) {
             baseActivity!!.hideKeyboard()
         }
     }
 
+    // Shows a success dialog.
     fun showSuccess(title: String, content: String) {
         mSuccessDialog = SweetAlertDialog(baseActivity, SweetAlertDialog.SUCCESS_TYPE)
         mSuccessDialog.titleText = title
@@ -101,10 +113,12 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel<*>>: Fragment
         mSuccessDialog.show()
     }
 
+    // Hides the success dialog.
     fun hideSuccess() {
         mSuccessDialog.hide()
     }
 
+    // Shows an error dialog.
     fun showError(title: String, content: String) {
         mErrorDialog = SweetAlertDialog(baseActivity, SweetAlertDialog.ERROR_TYPE)
         mErrorDialog.titleText = title
@@ -112,14 +126,13 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel<*>>: Fragment
         mErrorDialog.show()
     }
 
+    // Hides the error dialog.
     fun hideError() {
         mErrorDialog.hide()
     }
 
-    private fun performDependencyInjection() {
-        AndroidSupportInjection.inject(this)
-    }
 
+    // An interface for hosting activities to receive updates from the fragment.
     interface Callback {
 
         fun onFragmentAttached()

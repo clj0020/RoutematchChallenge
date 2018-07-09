@@ -5,6 +5,9 @@ import com.routematch.routematchcodingchallenge.util.SchedulerProvider
 import dagger.Module
 import dagger.Provides
 
+/**
+ * This is the PlaceActivityModule that allows the PlaceActivity to inject the ViewModel.
+ */
 @Module
 class PlaceActivityModule {
 

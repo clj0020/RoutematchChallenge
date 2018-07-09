@@ -1,13 +1,9 @@
 package com.routematch.routematchcodingchallenge.ui.main
 
+/** The Empty Place Item ViewModel. Could add an interface method to retry getting nearby places. **/
 class PlaceEmptyItemViewModel(private val mListener: PlaceEmptyItemViewModelListener) {
-
-//    fun onRetryClick() {
-//        mListener.onRetryClick()
-//    }
 
     interface PlaceEmptyItemViewModelListener {
 
-//        fun onRetryClick()
     }
 }

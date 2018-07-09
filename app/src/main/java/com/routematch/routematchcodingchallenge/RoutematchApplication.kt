@@ -13,9 +13,11 @@ import com.routematch.routematchcodingchallenge.di.DaggerAppComponent
  */
 class RoutematchApplication : Application(), HasActivityInjector {
 
+    // Injects the DispatchingAndroidInjector for activities.
     @Inject
     internal lateinit var activityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
 
+    // Gets the activity injector.
     override fun activityInjector(): DispatchingAndroidInjector<Activity>? {
         return activityDispatchingAndroidInjector
     }
@@ -23,11 +25,13 @@ class RoutematchApplication : Application(), HasActivityInjector {
     override fun onCreate() {
         super.onCreate()
 
+        // Builds the DaggerAppComponent
         DaggerAppComponent.builder()
                 .application(this)
                 .build()
                 .inject(this)
 
+        // Initializes the networking library.
         AndroidNetworking.initialize(applicationContext)
     }
 }

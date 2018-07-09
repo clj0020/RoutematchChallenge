@@ -1,15 +1,6 @@
 package com.routematch.routematchcodingchallenge.di
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-import javax.inject.Qualifier;
-
-
-
-/**
- * Created by clj00 on 3/2/2018.
- */
+import javax.inject.Qualifier
 
 @Qualifier
 @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)

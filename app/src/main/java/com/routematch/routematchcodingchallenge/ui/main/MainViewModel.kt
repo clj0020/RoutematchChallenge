@@ -12,7 +12,7 @@ import com.routematch.routematchcodingchallenge.ui.base.BaseViewModel
 import com.routematch.routematchcodingchallenge.ui.main.MainActivity.Companion.TAG
 import com.routematch.routematchcodingchallenge.util.SchedulerProvider
 
-
+/** The ViewModel for the MainActivity. Fetches nearby places and posts the results to the observing MainActivity. **/
 class MainViewModel(dataManager: DataManager, schedulerProvider: SchedulerProvider): BaseViewModel<MainNavigator>(dataManager, schedulerProvider) {
 
     val nearbyPlacesObservableList: ObservableList<Place>?= ObservableArrayList<Place>()

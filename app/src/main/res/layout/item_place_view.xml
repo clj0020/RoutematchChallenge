@@ -14,6 +14,10 @@
             name="viewModel"
             type="com.routematch.routematchcodingchallenge.ui.main.PlaceItemViewModel" />
 
+        <variable
+            name="imageLoaderCallback"
+            type="com.routematch.routematchcodingchallenge.util.ImageLoaderCallback" />
+
     </data>
 
     <LinearLayout
@@ -43,6 +47,8 @@
                     android:scaleType="centerCrop"
                     android:tint="#6F000000"
                     android:src="@drawable/default_place_image"
+                    app:imageUrl='@{ViewUtils.createPlacesApiUrl(viewModel.photo_references, 250) ?? "https://upload.wikimedia.org/wikipedia/commons/4/44/Restaurant_des_d%C3%A9put%C3%A9s_%28B%C3%A2timent_Altiero_Spinelli%2C_Parlement_europ%C3%A9en%2C_Bruxelles%29.JPG"}'
+                    app:imageCallback="@{imageLoaderCallback}"
                     tools:src="@drawable/default_place_image" />
 
                 <RelativeLayout
@@ -107,6 +113,15 @@
                         tools:text="Cheeburger Cheeburger" />
 
                 </LinearLayout>
+
+                <android.support.v4.widget.ContentLoadingProgressBar
+                    android:id="@+id/loading_indicator"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"
+                    tools:visibility="visible" />
 
 
             </RelativeLayout>

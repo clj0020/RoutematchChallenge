@@ -7,6 +7,9 @@ import dagger.Component
 import dagger.android.AndroidInjectionModule
 import javax.inject.Singleton
 
+/**
+ * This class tells Dagger how to Inject the Application and its corresponding dependencies.
+ */
 @Singleton
 @Component(modules = [
     AndroidInjectionModule::class,

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.madmensoftware.sips.ui.main.MainActivity">
 
     <data>
@@ -16,6 +17,11 @@
         <variable
             name="place"
             type="com.routematch.routematchcodingchallenge.data.models.Place" />
+
+        <variable
+            name="imageLoaderCallback"
+            type="com.routematch.routematchcodingchallenge.util.ImageLoaderCallback" />
+
     </data>
 
     <RelativeLayout
@@ -28,8 +34,10 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/place_image_content_description"
             android:scaleType="centerCrop"
-            android:tint="#6B000000"
+            android:tint="#6F000000"
             android:src="@drawable/default_place_image"
+            app:imageUrl='@{ViewUtils.createPlacesApiUrl(place.photo_references, 250) ?? "https://upload.wikimedia.org/wikipedia/commons/4/44/Restaurant_des_d%C3%A9put%C3%A9s_%28B%C3%A2timent_Altiero_Spinelli%2C_Parlement_europ%C3%A9en%2C_Bruxelles%29.JPG"}'
+            app:imageCallback="@{imageLoaderCallback}"
             tools:src="@drawable/default_place_image" />
 
         <LinearLayout
@@ -158,6 +166,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}" />
+
+
 
     </RelativeLayout>
 </layout>
