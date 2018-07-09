@@ -5,10 +5,11 @@ import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject
 import dagger.android.HasActivityInjector
 import android.app.Application
+import com.androidnetworking.AndroidNetworking
 import com.routematch.routematchcodingchallenge.di.DaggerAppComponent
 
 /**
- * Created by clj00 on 3/2/2018.
+ * The main application file used for setting up libraries like dagger and fast networking.
  */
 class RoutematchApplication : Application(), HasActivityInjector {
 
@@ -26,5 +27,7 @@ class RoutematchApplication : Application(), HasActivityInjector {
                 .application(this)
                 .build()
                 .inject(this)
+
+        AndroidNetworking.initialize(applicationContext)
     }
 }

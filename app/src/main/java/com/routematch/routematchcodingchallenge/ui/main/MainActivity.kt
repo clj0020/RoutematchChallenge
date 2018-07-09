@@ -9,16 +9,21 @@ import android.os.Bundle
 import com.routematch.routematchcodingchallenge.R
 import android.content.pm.PackageManager
 import android.location.Location
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.LinearLayoutManager
 import com.google.android.gms.maps.model.LatLng
 import android.util.Log
-import android.widget.Toast
-import com.google.android.gms.maps.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+
 import com.routematch.routematchcodingchallenge.BR
+import com.routematch.routematchcodingchallenge.data.models.Place
 import com.routematch.routematchcodingchallenge.databinding.ActivityMainBinding
 import com.routematch.routematchcodingchallenge.ui.base.BaseActivity
 import javax.inject.Inject
 import com.routematch.routematchcodingchallenge.util.LocationHelperLiveData
-import com.google.android.gms.maps.CameraUpdateFactory
 
 
 
@@ -27,7 +32,16 @@ import com.google.android.gms.maps.CameraUpdateFactory
  */
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
         MainNavigator,
-        OnMapReadyCallback {
+        OnMapReadyCallback,
+        NearbyPlacesListAdapter.NearbyPlacesAdapterListener {
+
+    @Inject
+    lateinit var mNearbyPlacesAdapter: NearbyPlacesListAdapter
+
+    @Inject
+    lateinit var mLayoutManager: LinearLayoutManager
+
+    private var mNearbyPlaces: List<Place> = arrayListOf()
 
     @Inject
     override lateinit var viewModel: MainViewModel
@@ -51,11 +65,33 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
         mActivityMainBinding = viewDataBinding
         viewModel.navigator = this
 
+        setup()
+    }
+
+    private fun setup() {
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mMapFragment = supportFragmentManager.findFragmentById(R.id.google_map) as SupportMapFragment
         mMapFragment.getMapAsync(this)
 
+        mNearbyPlacesAdapter.setListener(this)
+
+        mActivityMainBinding!!.nearbyPlacesListRecyclerView.setLayoutManager(mLayoutManager)
+        mActivityMainBinding!!.nearbyPlacesListRecyclerView.setItemAnimator(DefaultItemAnimator())
+        mActivityMainBinding!!.nearbyPlacesListRecyclerView.setAdapter(mNearbyPlacesAdapter)
+
         subscribeToLocationHelper()
+        subscribeToNearbyPlacesListLiveData()
+    }
+
+    private fun subscribeToNearbyPlacesListLiveData() {
+        viewModel.nearbyPlacesListLiveData.observe(this, Observer<List<Place>> { nearbyPlaces ->
+            viewModel.addPlaceItemsToList(nearbyPlaces!!)
+            mNearbyPlaces = nearbyPlaces
+        })
+    }
+
+    override fun updateNearbyPlacesList(nearbyPlaces: List<Place>) {
+        mNearbyPlacesAdapter.addItems(nearbyPlaces)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -74,7 +110,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
                 mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 18.0f))
 
                 // Next we'll connect to the Google Places API and Populate a RecyclerView with the results.
-
+                viewModel.fetchNearbyPlaces(
+                        location = mLocation,
+                        radius = DEFAULT_NEARBY_PLACES_RADIUS,
+                        type = DEFAULT_NEARBY_PLACES_TYPE
+                )
             }
             else {
                 // if the location is null, then we don't do anything.
@@ -134,6 +174,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
         val TAG = MainActivity::class.java.simpleName
         val REQUEST_CHECK_SETTINGS: Int = 0x1
         val REQUEST_LOCATION_PERMISSION: Int = 200
+
+        val DEFAULT_NEARBY_PLACES_RADIUS = 1 * 5000 // 5 km
+        val DEFAULT_NEARBY_PLACES_TYPE = "restaurant"
 
         fun newIntent(context: Context): Intent {
             return Intent(context, MainActivity::class.java)

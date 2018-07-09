@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RoutematchCodingChallenge</string>
+    <string name="no_nearby_places_found">No Nearby Places Found</string>
+    <string name="place_image_content_description">The Place\'s Image</string>
 </resources>
