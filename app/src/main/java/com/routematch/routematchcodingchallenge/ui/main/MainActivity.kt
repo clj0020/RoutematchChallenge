@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.routematch.routematchcodingchallenge.R
 import android.content.pm.PackageManager
+import android.graphics.Point
 import android.location.Location
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -17,6 +18,8 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.MarkerOptions
 
 import com.routematch.routematchcodingchallenge.BR
 import com.routematch.routematchcodingchallenge.data.models.Place
@@ -25,6 +28,7 @@ import com.routematch.routematchcodingchallenge.ui.base.BaseActivity
 import com.routematch.routematchcodingchallenge.ui.place.PlaceActivity
 import javax.inject.Inject
 import com.routematch.routematchcodingchallenge.util.LocationHelperLiveData
+import com.routematch.routematchcodingchallenge.util.ViewUtils
 
 
 
@@ -99,7 +103,15 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
     /** Subscribes to Nearby Places List in the ViewModel. This will populate the RecyclerView with NearbyPlaces when a new current location is found. **/
     private fun subscribeToNearbyPlacesListLiveData() {
         viewModel.nearbyPlacesListLiveData.observe(this, Observer<List<Place>> { nearbyPlaces ->
+            // Add nearby place items to RecyclerView.
             viewModel.addPlaceItemsToList(nearbyPlaces!!)
+
+            // Add markers to the map.
+            for (place in nearbyPlaces) {
+                if (place.lat != null && place.lng != null) {
+                    mGoogleMap.addMarker(MarkerOptions().position(LatLng(place.lat, place.lng)).title(place.name))
+                }
+            }
         })
     }
 
@@ -122,7 +134,12 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
                 // If location is not null, Move Google Map camera to location.
                 mLocation = location
                 mGoogleMap.setMyLocationEnabled(true)
-                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 18.0f))
+
+                // Offset center of map to be above Nearby Places list.
+                mGoogleMap.setPadding(0, 0, 0, ViewUtils.dpToPx(400.0f) /* Sets bottom padding to the same value as height of RecyclerView. */)
+
+                // Animate the camera to the new location.
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 14.0f))
 
                 // Next we'll connect to the Google Places API and Populate a RecyclerView with the results.
                 viewModel.fetchNearbyPlaces(

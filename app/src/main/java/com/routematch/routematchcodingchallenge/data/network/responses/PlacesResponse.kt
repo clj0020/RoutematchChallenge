@@ -187,11 +187,11 @@ class PlacesResponse {
 
                     @Expose
                     @SerializedName("lat")
-                    var lat: Number? = null
+                    var lat: Double? = null
 
                     @Expose
                     @SerializedName("lng")
-                    var lng: Number? = null
+                    var lng: Double? = null
 
                     override fun equals(other: Any?): Boolean {
                         if (this === other) {
@@ -502,11 +502,11 @@ class PlacesResponse {
 
                     @Expose
                     @SerializedName("lat")
-                    var lat: Number? = null
+                    var lat: Double? = null
 
                     @Expose
                     @SerializedName("lng")
-                    var lng: Number? = null
+                    var lng: Double? = null
 
                     override fun equals(other: Any?): Boolean {
                         if (this === other) {

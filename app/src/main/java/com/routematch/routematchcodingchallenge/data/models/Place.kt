@@ -9,8 +9,8 @@ data class Place(
         val name: String?,
         val rating: Number?,
         val price_level: Int?,
-        val lat: Number?,
-        val lng: Number?
+        val lat: Double?,
+        val lng: Double?
 ) {
     // For fields that need to be set later.
     var photo_references: List<String>? = null
