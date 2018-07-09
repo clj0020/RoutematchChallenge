@@ -67,7 +67,7 @@ class PlacesResponse {
 
             @Expose
             @SerializedName("price_level")
-            var price_level: Number? = null
+            var price_level: Int? = null
 
             @Expose
             @SerializedName("rating")
@@ -359,11 +359,23 @@ class PlacesResponse {
 
             @Expose
             @SerializedName("price_level")
-            var price_level: Number? = null
+            var price_level: Int? = null
 
             @Expose
             @SerializedName("rating")
             var rating: Number? = null
+
+            @Expose
+            @SerializedName("formatted_address")
+            var formatted_address: String? = null
+
+            @Expose
+            @SerializedName("formatted_phone_number")
+            var formatted_phone_number: String? = null
+
+            @Expose
+            @SerializedName("website")
+            var website: String? = null
 
             @Expose
             @SerializedName("photos")
@@ -419,6 +431,15 @@ class PlacesResponse {
                 if (rating != that.rating) {
                     return false
                 }
+                if (formatted_address != that.formatted_address) {
+                    return false
+                }
+                if (formatted_phone_number != that.formatted_phone_number) {
+                    return false
+                }
+                if (website != that.website) {
+                    return false
+                }
                 if (photos != that.photos) {
                     return false
                 }
@@ -446,6 +467,9 @@ class PlacesResponse {
                 result = 31 * result + reference!!.hashCode()
                 result = 31 * result + price_level!!.hashCode()
                 result = 31 * result + rating!!.hashCode()
+                result = 31 * result + formatted_address!!.hashCode()
+                result = 31 * result + formatted_phone_number!!.hashCode()
+                result = 31 * result + website!!.hashCode()
                 result = 31 * result + types!!.hashCode()
                 result = 31 * result + vicinity!!.hashCode()
                 return result
@@ -517,6 +541,9 @@ class PlacesResponse {
                 @SerializedName("open_now")
                 var open_now: Boolean? = null
 
+                @Expose
+                @SerializedName("weekday_text")
+                var weekday_text: List<String>? = null
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -528,11 +555,15 @@ class PlacesResponse {
 
                     val that = other
 
+                    if (weekday_text != that.weekday_text) {
+                        return false
+                    }
                     return open_now == that.open_now
                 }
 
                 override fun hashCode(): Int {
-                    val result = open_now!!.hashCode()
+                    var result = open_now!!.hashCode()
+                    result = 31 * result + weekday_text!!.hashCode()
                     return result
                 }
             }

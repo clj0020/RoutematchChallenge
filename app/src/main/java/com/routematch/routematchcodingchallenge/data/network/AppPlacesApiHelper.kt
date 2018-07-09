@@ -51,9 +51,19 @@ class AppPlacesApiHelper @Inject constructor() : PlacesApiHelper {
                     rating = item.rating,
                     price_level = item.price_level,
                     lat = item.geometry?.location?.lat,
-                    lng = item.geometry?.location?.lng,
-                    image_url = item.photos?.get(0)?.photo_reference
+                    lng = item.geometry?.location?.lng
             )
+
+            // Set photo references if they exist
+            if (item.photos != null) {
+                val _listPhotoReferences = mutableListOf<String>()
+                for (photo in item.photos!!) {
+                    if (photo.photo_reference != null) {
+                        _listPhotoReferences.add(photo.photo_reference!!)
+                    }
+                }
+                place.photo_references = _listPhotoReferences.toList()
+            }
 
             _listPlaces.add(place)
         }
@@ -67,16 +77,36 @@ class AppPlacesApiHelper @Inject constructor() : PlacesApiHelper {
             return null
         }
 
-        return Place(
+        val placeResult = Place(
                 id = place.id,
                 place_id = place.place_id,
                 name = place.name,
                 rating = place.rating,
                 price_level = place.price_level,
                 lat = place.geometry?.location?.lat,
-                lng = place.geometry?.location?.lng,
-                image_url = place.photos?.get(0)?.photo_reference
+                lng = place.geometry?.location?.lng
         )
+
+
+        // Set photo references if they exist
+        if (place.photos != null) {
+            val _listPhotoReferences = mutableListOf<String>()
+            for (photo in place.photos!!) {
+                if (photo.photo_reference != null) {
+                    _listPhotoReferences.add(photo.photo_reference!!)
+                }
+            }
+            placeResult.photo_references = _listPhotoReferences.toList()
+        }
+
+        // Set other fields that are unique to place details returned by Places API
+        placeResult.website = place.website
+        placeResult.formatted_address = place.formatted_address
+        placeResult.formatted_phone_number = place.formatted_phone_number
+        placeResult.hours_of_operation = place.opening_hours?.weekday_text
+        placeResult.is_open = place.opening_hours?.open_now
+
+        return placeResult
     }
 
 }

@@ -7,8 +7,15 @@ data class Place(
         val place_id: String?,
         val name: String?,
         val rating: Number?,
-        val price_level: Number?,
+        val price_level: Int?,
         val lat: Number?,
-        val lng: Number?,
-        val image_url: String?
-) {}
+        val lng: Number?
+) {
+    // For fields that need to be set later.
+    var photo_references: List<String>? = null
+    var website: String? = null
+    var formatted_address: String? = null
+    var formatted_phone_number: String? = null
+    var hours_of_operation: List<String>? = null
+    var is_open: Boolean? = null
+}

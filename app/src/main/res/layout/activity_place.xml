@@ -5,9 +5,14 @@
 
     <data>
         <import type="android.view.View" />
+
+        <import
+            type="com.routematch.routematchcodingchallenge.util.ViewUtils"/>
+
         <variable
             name="viewModel"
             type="com.routematch.routematchcodingchallenge.ui.place.PlaceViewModel" />
+
         <variable
             name="place"
             type="com.routematch.routematchcodingchallenge.data.models.Place" />
@@ -17,10 +22,142 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <ImageView
+            android:id="@+id/place_detail_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/place_image_content_description"
+            android:scaleType="centerCrop"
+            android:tint="#6B000000"
+            android:src="@drawable/default_place_image"
+            tools:src="@drawable/default_place_image" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="5">
+
+            <TextView
+                android:id="@+id/place_detail_rating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="2"
+                android:text='@{place.rating + " stars"}'
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:visibility="@{place.rating == null ? View.INVISIBLE : View.VISIBLE}"
+                tools:text="4.5 / 5 rating" />
+
+            <TextView
+                android:id="@+id/place_detail_is_open"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_weight="1"
+                android:text='@{place.is_open == false ? "Closed" : "Open Now!"}'
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:visibility="@{place.is_open == null ? View.INVISIBLE : View.VISIBLE}"
+                tools:text="Open Now!" />
+
+            <TextView
+                android:id="@+id/place_detail_price_level"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="2"
+                android:text='@{ViewUtils.formatPriceLevel(place.price_level) ?? ""}'
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:visibility="@{place.price_level == null ? View.INVISIBLE : View.VISIBLE}"
+                tools:text="$$" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="30dp">
+
+            <TextView
+                android:id="@+id/place_detail_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@{place.name}"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                tools:text="Cheeburger Cheeburger" />
+
+            <TextView
+                android:id="@+id/place_detail_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@{place.formatted_address}"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:autoLink="map"
+                android:visibility="@{place.formatted_address == null ? View.GONE : View.VISIBLE}"
+                tools:text="123 Billy Street" />
+
+            <TextView
+                android:id="@+id/place_detail_phone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@{place.formatted_phone_number}"
+                android:textSize="18sp"
+                android:autoLink="phone"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:visibility="@{place.formatted_phone_number == null ? View.GONE : View.VISIBLE}"
+                tools:text="(205) 555 - 5501" />
+
+            <TextView
+                android:id="@+id/place_detail_website"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:autoLink="web"
+                android:text="@{place.website}"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:visibility="@{place.website == null ? View.GONE : View.VISIBLE}"
+                tools:text="http://www.littlecaesars.com/?utm_source=google&amp;utm_medium=local&amp;utml_campaign=localmaps&amp;utm_content=11710003" />
+
+        </LinearLayout>
+
+
+
+        <android.support.v4.widget.ContentLoadingProgressBar
+            android:id="@+id/loading_indicator"
+            style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{place.name}"/>
+            android:layout_centerInParent="true"
+            android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}" />
 
     </RelativeLayout>
 </layout>

@@ -7,14 +7,12 @@ class PlaceItemViewModel(private val mPlace: Place, val mListener: PlaceItemView
 
     val name: ObservableField<String?>
     val rating: ObservableField<Number?>
-    val price_level: ObservableField<Number?>
-    val image_url: ObservableField<String?>
+    val price_level: ObservableField<Int?>
 
     init {
         name = ObservableField(mPlace.name)
         rating = ObservableField(mPlace.rating)
         price_level = ObservableField(mPlace.price_level)
-        image_url = ObservableField(mPlace.image_url)
     }
 
     fun onItemClick() {
