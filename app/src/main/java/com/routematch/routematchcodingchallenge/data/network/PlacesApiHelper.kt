@@ -8,4 +8,6 @@ import io.reactivex.Single
 interface PlacesApiHelper {
 
     fun getNearbyPlaces(location: Location, radius: Int, type: String): Single<List<Place>>
+
+    fun getPlaceDetails(place_id: String): Single<Place?>
 }

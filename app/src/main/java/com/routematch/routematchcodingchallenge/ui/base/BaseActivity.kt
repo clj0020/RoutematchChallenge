@@ -22,6 +22,8 @@ abstract class BaseActivity<T: ViewDataBinding, V : BaseViewModel<*>> : AppCompa
     // this can probably depend on isLoading variable of BaseViewModel,
     // since its going to be common for all the activities
     private lateinit var mLoadingDialog: SweetAlertDialog
+    private lateinit var mSuccessDialog: SweetAlertDialog
+    private lateinit var mErrorDialog: SweetAlertDialog
 
     var viewDataBinding: T ?= null
         private set
@@ -98,6 +100,28 @@ abstract class BaseActivity<T: ViewDataBinding, V : BaseViewModel<*>> : AppCompa
         mLoadingDialog.setTitleText("Loading")
         mLoadingDialog.setCancelable(false)
         mLoadingDialog.show()
+    }
+
+    fun showSuccess(title: String, content: String) {
+        mSuccessDialog = SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+        mSuccessDialog.titleText = title
+        mSuccessDialog.contentText = content
+        mSuccessDialog.show()
+    }
+
+    fun hideSuccess() {
+        mSuccessDialog.hide()
+    }
+
+    fun showError(title: String, content: String) {
+        mErrorDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+        mErrorDialog.titleText = title
+        mErrorDialog.contentText = content
+        mErrorDialog.show()
+    }
+
+    fun hideError() {
+        mErrorDialog.hide()
     }
 
     fun hideLoading() {

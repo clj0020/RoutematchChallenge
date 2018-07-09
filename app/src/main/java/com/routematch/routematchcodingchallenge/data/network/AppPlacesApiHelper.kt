@@ -1,12 +1,9 @@
 package com.routematch.routematchcodingchallenge.data.network
 
 import android.location.Location
-import android.util.Log
 import com.routematch.routematchcodingchallenge.BuildConfig
-import com.routematch.routematchcodingchallenge.R
 import com.routematch.routematchcodingchallenge.data.models.Place
 import com.routematch.routematchcodingchallenge.data.network.responses.PlacesResponse
-import com.routematch.routematchcodingchallenge.ui.main.MainActivity.Companion.TAG
 import com.rx2androidnetworking.Rx2AndroidNetworking
 import io.reactivex.Single
 import javax.inject.Inject
@@ -15,7 +12,6 @@ import javax.inject.Singleton
 /** This is the instantiation of the PlacesApiHelper that the DataManager can call. **/
 @Singleton
 class AppPlacesApiHelper @Inject constructor() : PlacesApiHelper {
-
 
     /** Calls the Google Places API function for finding nearby places. **/
     override fun getNearbyPlaces(location: Location, radius: Int, type: String): Single<List<Place>> {
@@ -31,6 +27,18 @@ class AppPlacesApiHelper @Inject constructor() : PlacesApiHelper {
                 }
     }
 
+    /** Calls the Google Places API function for getting a place's details. **/
+    override fun getPlaceDetails(place_id: String): Single<Place?> {
+        return Rx2AndroidNetworking.get(PlacesApiEndPoint.ENDPOINT_PLACE_DETAILS)
+                .addQueryParameter("key", BuildConfig.GOOGLE_MAPS_API_KEY)
+                .addQueryParameter("placeid", place_id)
+                .build()
+                .getObjectSingle<PlacesResponse.GetPlaceDetails>(PlacesResponse.GetPlaceDetails::class.java)
+                .map{placeApiPlaceDetailsResult: PlacesResponse.GetPlaceDetails? ->
+                    mapPlaceDetailsResponseToPlaceModel(placeApiPlaceDetailsResult?.placeResult)
+                }
+    }
+
     /** Maps the response from the Google Places API to custom Place Class. **/
     fun mapPlacesListResponseToPlaceModel(placesList: List<PlacesResponse.GetNearbyPlaces.PlaceResult>): List<Place> {
         val _listPlaces = mutableListOf<Place>()
@@ -38,6 +46,7 @@ class AppPlacesApiHelper @Inject constructor() : PlacesApiHelper {
 
             val place = Place(
                     id = item.id,
+                    place_id = item.place_id,
                     name = item.name,
                     rating = item.rating,
                     price_level = item.price_level,
@@ -50,6 +59,24 @@ class AppPlacesApiHelper @Inject constructor() : PlacesApiHelper {
         }
 
         return _listPlaces.toList()
+    }
+
+    /** Maps the response from the Google Places API to custom Place Class. **/
+    fun mapPlaceDetailsResponseToPlaceModel(place: PlacesResponse.GetPlaceDetails.PlaceResult?): Place? {
+        if (place == null) {
+            return null
+        }
+
+        return Place(
+                id = place.id,
+                place_id = place.place_id,
+                name = place.name,
+                rating = place.rating,
+                price_level = place.price_level,
+                lat = place.geometry?.location?.lat,
+                lng = place.geometry?.location?.lng,
+                image_url = place.photos?.get(0)?.photo_reference
+        )
     }
 
 }

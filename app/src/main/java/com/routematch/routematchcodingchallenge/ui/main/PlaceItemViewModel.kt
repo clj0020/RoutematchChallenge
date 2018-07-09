@@ -18,11 +18,10 @@ class PlaceItemViewModel(private val mPlace: Place, val mListener: PlaceItemView
     }
 
     fun onItemClick() {
-        mListener.onItemClick(mPlace.id)
+        mListener.onItemClick(mPlace.place_id)
     }
 
     interface PlaceItemViewModelListener {
-
-        fun onItemClick(id: String?)
+        fun onItemClick(place_id: String?)
     }
 }

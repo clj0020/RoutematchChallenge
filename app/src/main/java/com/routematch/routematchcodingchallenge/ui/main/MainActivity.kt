@@ -22,6 +22,7 @@ import com.routematch.routematchcodingchallenge.BR
 import com.routematch.routematchcodingchallenge.data.models.Place
 import com.routematch.routematchcodingchallenge.databinding.ActivityMainBinding
 import com.routematch.routematchcodingchallenge.ui.base.BaseActivity
+import com.routematch.routematchcodingchallenge.ui.place.PlaceActivity
 import javax.inject.Inject
 import com.routematch.routematchcodingchallenge.util.LocationHelperLiveData
 
@@ -164,9 +165,19 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(),
         }
     }
 
+    override fun onPlaceClick(place_id: String?) {
+        startActivity(PlaceActivity.newIntent(this, place_id))
+    }
+
     /** Handles errors. **/
     override fun handleError(throwable: Throwable) {
         // handle error
+        if (throwable.message != null) {
+            showError("Oh no!", throwable.message.toString())
+        }
+        else {
+            showError("Oh no!", "An unknown error occurred!")
+        }
     }
 
     /** Contains Constants and Initialization **/

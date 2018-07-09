@@ -90,8 +90,8 @@ class NearbyPlacesListAdapter(val mPlacesList: MutableList<Place>?) : RecyclerVi
             mBinding.executePendingBindings()
         }
 
-        override fun onItemClick(id: String?) {
-            // TODO: When a place item is clicked respond by displaying place details.
+        override fun onItemClick(place_id: String?) {
+            (itemView.context as MainActivity).onPlaceClick(place_id)
         }
     }
 

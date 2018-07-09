@@ -4,6 +4,7 @@ import android.location.Location
 
 data class Place(
         val id: String?,
+        val place_id: String?,
         val name: String?,
         val rating: Number?,
         val price_level: Number?,

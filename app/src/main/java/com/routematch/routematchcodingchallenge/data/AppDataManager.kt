@@ -29,4 +29,11 @@ class AppDataManager @Inject constructor(private val mContext: Context,
         )
     }
 
+    /** Calls the Places API Helper function for getting place details. **/
+    override fun getPlaceDetails(place_id: String): Single<Place?> {
+        return mPlacesApiHelper.getPlaceDetails(
+                place_id = place_id
+        )
+    }
+
 }
